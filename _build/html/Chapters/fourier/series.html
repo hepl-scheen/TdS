@@ -1,0 +1,712 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Série de Fourier &#8212; Introduction to signal processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Chapters/fourier/series';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Transformée de Fourier" href="transf.html" />
+    <link rel="prev" title="Introduction" href="motivation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.jpg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notions élémentaires</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notions/definition.html">Traitement du signal ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/Signal.html">Un signal ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/classification.html">Classification des signaux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/signaux-elementaires.html">Signaux élémentaires</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/proprietes-des-signaux.html">Propriétés des signaux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/energie-puissance.html">Énergie et puissance</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Analyse de Fourier</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="motivation.html">Introduction</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Séries de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transf.html">Transformées de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proprietes.html">Propriétés des transformations de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="temps-frequence.html">Représentation temps-fréquence</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FChapters/fourier/series.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/Chapters/fourier/series.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Série de Fourier</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#serie-de-fourier-discrete">Série de Fourier discrète</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valeur-rms">Valeur RMS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#phenomene-de-gibbs">Phénomène de Gibbs</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="serie-de-fourier">
+<span id="c-fourier"></span><h1>Série de Fourier<a class="headerlink" href="#serie-de-fourier" title="Permalink to this heading">#</a></h1>
+<p>Tout signal <span class="math notranslate nohighlight">\(x(t)\)</span> à temps continu et périodique de période <span class="math notranslate nohighlight">\(T\)</span> peut s’écrire comme une combinaison linéaire
+de fonctions <span class="math notranslate nohighlight">\(\exp\left(j 2\pi k f_{0} t\right)\)</span>, qui sont elles-mêmes périodiques de période <span class="math notranslate nohighlight">\(T\)</span> :</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>Cette formule est la série de Fourier inverse.</p>
+</aside>
+<div class="math notranslate nohighlight">
+\[
+x(t) = \sum_{k=-\infty}^{+\infty} X[k] e^{+j 2 \pi k f_{0} t}
+\]</div>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>Vous remarquerez que le signal temporel <span class="math notranslate nohighlight">\(x\)</span> est noté en minuscule,
+alors que le signal fréquentiel <span class="math notranslate nohighlight">\(X\)</span> est en majuscule.</p>
+</aside>
+<p>où <span class="math notranslate nohighlight">\(k \in \mathbb{Z}\)</span> est la « fréquence » et <span class="math notranslate nohighlight">\(X[k]\)</span> sont des coefficients.
+L’ensemble de ces coefficients, noté simplement <span class="math notranslate nohighlight">\(X\)</span>, est la série de Fourier de <span class="math notranslate nohighlight">\(x\)</span> ; c’est aussi un signal.
+On montre que les coefficients de la série de Fourier sont définis par :</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>Cette formule est la série de Fourier.</p>
+</aside>
+<div class="math notranslate nohighlight">
+\[
+X[k] = \frac{1}{T} \int_T x(t) e^{-j 2 \pi k f_{0} t } dt.
+\]</div>
+<p>Le terme <span class="math notranslate nohighlight">\(k\)</span> est appelé la <span class="math notranslate nohighlight">\(k\)</span><sup>e</sup> harmonique.
+En particulier, le terme <span class="math notranslate nohighlight">\(X[1]\)</span> est la première harmonique, que l’on appelle aussi la « composante fondamentale » ou simplement <em>fondamentale</em>.
+Le terme <span class="math notranslate nohighlight">\(X[0]\)</span> correspond à la moyenne du signal :</p>
+<div class="math notranslate nohighlight">
+\[
+X[0] = \frac{1}{T} \int_T x(t) dt.
+\]</div>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+Formulation alternative : Forme trigonométrique réelle<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parfois, la série de Fourier de signaux réels est définie comme l’ensemble des coefficients <span class="math notranslate nohighlight">\(a_k\)</span> et <span class="math notranslate nohighlight">\(b_k\)</span> tels que :</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+                                  a_0 &amp;= \frac{1}{T} \int_0^T x(t) dt \\
+\forall k \in\mathbb{N}^*, \qquad a_k &amp;= \frac{2}{T} \int_0^T x(t) \cos(2 \pi k f_{0} t) dt \\
+\forall k \in\mathbb{N}^*, \qquad b_k &amp;= \frac{2}{T} \int_0^T x(t) \sin(2 \pi k f_{0} t) dt
+\end{split}\]</div>
+<p class="sd-card-text">La relation entre ces coefficients <span class="math notranslate nohighlight">\(a_k\)</span> et <span class="math notranslate nohighlight">\(b_k\)</span> avec l’expression précédente de la série de Fourier est :</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\text{si}\, k&lt;0\,:\qquad X[k] &amp;= \frac{a_{-k}+jb_{-k}}{2} \\
+\text{si}\, k=0\,:\qquad X[0] &amp;= a_0 \\
+\text{si}\, k&gt;0\,:\qquad X[k] &amp;= \frac{a_k-jb_k}{2}
+\end{split}\]</div>
+<p class="sd-card-text">et la formule de la série de Fourier inverse devient :</p>
+<div class="math notranslate nohighlight">
+\[
+x(t) = a_0 + \sum_{k=1}^{+\infty} \left( a_k \cos(2 \pi k f_{0} t) + b_k \sin(2 \pi k f_{0} t) \right).
+\]</div>
+<p class="sd-card-text">Dans le cadre de ce module, nous n’utiliserons pas les formules faisant intervenir <span class="math notranslate nohighlight">\(a_k\)</span> et <span class="math notranslate nohighlight">\(b_k\)</span>
+car elles obligent à effectuer deux fois plus de calculs qu’avec les formules précédentes utilisant <span class="math notranslate nohighlight">\(X[k]\)</span>.
+En effet, la formulation avec l’exponentielle complexe regroupe les termes en cosinus et en sinus.
+C’est donc plus simple en complexe ! 😜</p>
+<p class="sd-card-text">La représentation du spectre devient :</p>
+<p class="sd-card-text"><img alt="Représentation trigonométrique" src="../../_images/rep_trig.jpg" /></p>
+<p class="sd-card-text">Ce qui n’est pas spécialement aisé à interpréter. Ce qui explique que nous n’utiliserons pas souvent cette forme.</p>
+<p class="sd-card-text">Vous pouvez tester cette représentation :
+<a class="reference external" href="https://www.falstad.com/fourier/">https://www.falstad.com/fourier/</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+Formulation alternative : Forme polaire<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Il existe une 3e formulation : la forme polaire. La forme polaire de la série de Fourier permet d’obtenir directement l’amplitude et la phase des harmoniques.</p>
+<div class="math notranslate nohighlight">
+\[
+x(t) = a_0 + \sum_{k=1}^{+\infty} \left( \mid A_{n}\mid \cos(2 \pi k f_{0} t + \theta_{n}) \right).
+\]</div>
+<p class="sd-card-text">où</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mid A_{n}\mid &amp;= \sqrt{a^2_n + b^2_n} \\
+\theta_n &amp;= tan^{-1} \left( \frac{-b_n}{a_n} \right) \\
+\end{split}\]</div>
+<p class="sd-card-text"><img alt="spectre des amplitudes" src="../../_images/fp_ampl.png" /></p>
+<p class="sd-card-text"><img alt="spectre des phases" src="../../_images/fp_phase.png" /></p>
+<p class="sd-card-text">Vous pouvez tester par vous même cette représentation :
+<a class="reference external" href="https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_all.html">https://phet.colorado.edu/sims/html/fourier-making-waves/latest/fourier-making-waves_all.html</a></p>
+</div>
+</details><div class="admonition-reconstruction admonition">
+<p class="admonition-title">Reconstruction</p>
+<p>Une fonction périodique est complètement définie par ses coefficients de Fourier et sa période :</p>
+<ul class="simple">
+<li><p>Si on connaît <span class="math notranslate nohighlight">\(X[k]\)</span> et <span class="math notranslate nohighlight">\(\omega_0\)</span>, on peut construire <span class="math notranslate nohighlight">\(x(𝑡)\)</span> en travaillant avec la forme complexe.</p></li>
+<li><p>Si on connaît <span class="math notranslate nohighlight">\(𝑎_𝑣\)</span>, <span class="math notranslate nohighlight">\(𝑎_𝑛\)</span>, <span class="math notranslate nohighlight">\(𝑏_𝑛\)</span> et <span class="math notranslate nohighlight">\(\omega_0\)</span>, on peut construire <span class="math notranslate nohighlight">\(x(𝑡)\)</span> en travaillant avec la forme trigonométrique réelle.</p></li>
+<li><p>Si on connaît l’amplitude <span class="math notranslate nohighlight">\(𝐴_𝑛\)</span> et la phase <span class="math notranslate nohighlight">\(\theta_𝑛\)</span>, on peut construire <span class="math notranslate nohighlight">\(x(𝑡)\)</span> en travaillant avec la forme polaire.</p></li>
+</ul>
+</div>
+<section id="serie-de-fourier-discrete">
+<h2>Série de Fourier discrète<a class="headerlink" href="#serie-de-fourier-discrete" title="Permalink to this heading">#</a></h2>
+<p>De même que pour la série de Fourier, un signal à temps discret et périodique de période <span class="math notranslate nohighlight">\(N\)</span>
+peut s’écrire comme la combinaison linéaire de fonctions <span class="math notranslate nohighlight">\(\exp\left(j\frac{2\pi k n}{N}\right)\)</span>,
+qui sont également périodiques de période <span class="math notranslate nohighlight">\(N\)</span> :</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>Cette formule est la série de Fourier discrète inverse.</p>
+</aside>
+<div class="math notranslate nohighlight">
+\[
+x[n] = \frac{1}{N} \sum_{k=0}^{N-1} X[k] e^{+j 2 \pi k n / N}
+\]</div>
+<p>et :</p>
+<aside class="margin sidebar">
+<p class="sidebar-title"></p>
+<p>Cette formule est la série de Fourier discrète.</p>
+</aside>
+<div class="math notranslate nohighlight">
+\[
+X[k] = \sum_{n=0}^{N-1} x[n] e^{-j 2 \pi k n / N}.
+\]</div>
+<p><strong>Remarque</strong>   Un signal <span class="math notranslate nohighlight">\(x[n]\)</span> à durée limité (donc non défini en dehors de l’intervalle <span class="math notranslate nohighlight">\(\{0,\dots,N-1\}\)</span>)
+peut être vu comme un signal périodique de période <span class="math notranslate nohighlight">\(N\)</span>.
+Il possède donc une série de Fourier discrète qui s’appelle dans ce cas « transformée de Fourier discrète » (TFD).
+Comme les signaux que l’on traite sur ordinateur sont toujours à durée limitée,
+alors ce sera cette transformée de Fourier discrète qui sera calculée.
+Il existe un algorithme très rapide pour la calculer : l’algorithme <a class="reference external" href="https://fr.wikipedia.org/wiki/Transformation_de_Fourier_rapide">FFT</a>
+(implémenté en Python par exemple dans la fonction <code class="docutils literal notranslate"><span class="pre">numpy.fft.fft</span></code>).</p>
+</section>
+<section id="valeur-rms">
+<h2>Valeur RMS<a class="headerlink" href="#valeur-rms" title="Permalink to this heading">#</a></h2>
+<p>La valeur RMS d’un signal peut être calculée à partir de la série de Fourier. On remplace la fonction <span class="math notranslate nohighlight">\(𝑓(𝑡)\)</span> par sa série de Fourier :</p>
+<figure class="align-default" id="f-proprietes-rms">
+<a class="reference internal image-reference" href="../../_images/rms.png"><img alt="../../_images/rms.png" src="../../_images/rms.png" style="width: 30%;" /></a>
+</figure>
+<p>Par contre, il est généralement plus simple de calculer la valeur RMS à partir de la fonction, plutôt que la série de Fourier.</p>
+</section>
+<section id="phenomene-de-gibbs">
+<h2>Phénomène de Gibbs<a class="headerlink" href="#phenomene-de-gibbs" title="Permalink to this heading">#</a></h2>
+<p>Le phénomène de Gibbs est l’apparition d’oscillations au abords des discontinuités d’un signal,
+lorsque celui-ci est reconstruit à partir des coefficients de sa série de Fourier.
+On comprend que si la reconstruction n’utilise qu’une partie des coefficients de la série de Fourier,
+alors le signal reconstruit sera différent du signal original.
+Lorsque le nombre de coefficients augmente, la reconstruction se rapproche du signal,
+sauf au discontinuités où il se produit des oscillations qui ne peuvent s’atténuer.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Phénomène de Gibbs</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+<span class="c1"># Signal de base</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># FFT</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Nombre de coefficients de la FFT à conserver (de -K à K)</span>
+<span class="n">K</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
+    
+    <span class="c1"># Annulation des coefficients de la FFT</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">Y</span><span class="p">[</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="o">-</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="c1"># Reconstruction</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    
+    <span class="c1"># Affichage</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">K</span><span class="p">),</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">.2</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstruction avec </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> coefficients&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;gibbs.svg&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/350130800b03def56f2d378159c681ee4c965634e4d1c315457b264d62a0c3b9.png" src="../../_images/350130800b03def56f2d378159c681ee4c965634e4d1c315457b264d62a0c3b9.png" />
+</div>
+</div>
+<p>Reconstruction d’un créneau à partir de quelques coefficients de sa série de Fourier discrète.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./Chapters/fourier"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="motivation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="transf.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Transformée de Fourier</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#serie-de-fourier-discrete">Série de Fourier discrète</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valeur-rms">Valeur RMS</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#phenomene-de-gibbs">Phénomène de Gibbs</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Gilles Scheen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

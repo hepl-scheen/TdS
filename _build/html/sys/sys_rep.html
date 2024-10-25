@@ -1,0 +1,685 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Réponses d’un système &#8212; Introduction to signal processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sys/sys_rep';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Convolution dans la mesure" href="conv-spectre.html" />
+    <link rel="prev" title="Les Systèmes" href="systemes.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.jpg" class="logo__image only-light" alt="Introduction to signal processing - Home"/>
+    <script>document.write(`<img src="../_static/logo.jpg" class="logo__image only-dark" alt="Introduction to signal processing - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notions élémentaires</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notions/definition.html">Traitement du signal ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/Signal.html">Un signal ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/classification.html">Classification des signaux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/signaux-elementaires.html">Signaux élémentaires</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/proprietes-des-signaux.html">Propriétés des signaux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notions/energie-puissance.html">Énergie et puissance</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Analyse de Fourier</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../fourier/motivation.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../fourier/series.html">Séries de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fourier/transf.html">Transformées de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fourier/proprietes.html">Propriétés des transformations de Fourier</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fourier/temps-frequence.html">Représentation temps-fréquence</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Convolution</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../conv/convolution.html">Produit de convolution</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Numérisation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../num/numerisation.html">Motivations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../num/echantillonnage.html">Échantillonnage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../num/quantification.html">Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../num/fenetrage.html">Fenêtrage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Systèmes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="systemes.html">Les Systèmes</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Réponses d'un système</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="conv-spectre.html">Mesures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conv-amortisseur.html">Système physique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conv-son.html">Filtrage sonore</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fsys/sys_rep.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/sys/sys_rep.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Réponses d’un système</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reponse-impulsionnelle">Réponse impulsionnelle</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reponse-frequentielle">Réponse fréquentielle</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gain">Gain</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#phase">Phase</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#retard-de-groupe">Retard de groupe</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="reponses-d-un-systeme">
+<h1>Réponses d’un système<a class="headerlink" href="#reponses-d-un-systeme" title="Permalink to this heading">#</a></h1>
+<section id="reponse-impulsionnelle">
+<h2>Réponse impulsionnelle<a class="headerlink" href="#reponse-impulsionnelle" title="Permalink to this heading">#</a></h2>
+<p>La <em>réponse impulsionnelle</em> est une caractéristique très importante des systèmes. Si l’entrée à un système est un pulse <span class="math notranslate nohighlight">\(\delta(t)\)</span>, alors la sortie est appelée la <em>réponse impulsionnelle</em> <span class="math notranslate nohighlight">\(h(t)\)</span>.</p>
+<figure class="align-default" id="f-convolution-rep-imp">
+<a class="reference internal image-reference" href="../_images/rep_imp.png"><img alt="../_images/rep_imp.png" src="../_images/rep_imp.png" style="width: 400px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 53 </span><span class="caption-text">Réponse impulsionnelle d’un système</span><a class="headerlink" href="#f-convolution-rep-imp" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>On peut démontrer que si on connaît la réponse impulsionnelle, on peut calculer la sortie pour n’importe quelle entrée (pour un système linéaire).</p>
+<p>Nous allons aborder cette démonstration du point de vue discret pour une question de clarté, mais nous pouvons l’appliquer aux signaux continus.</p>
+<p>On peut représenter un signal discret comme la somme d’impulsions.</p>
+<figure class="align-default" id="f-convolution-som-imp">
+<a class="reference internal image-reference" href="../_images/som_imp.png"><img alt="../_images/som_imp.png" src="../_images/som_imp.png" style="width: 700px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 54 </span><span class="caption-text">…</span><a class="headerlink" href="#f-convolution-som-imp" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Et de façon générale :</p>
+<figure class="align-default" id="f-convolution-som-imp2">
+<a class="reference internal image-reference" href="../_images/som_imp2.png"><img alt="../_images/som_imp2.png" src="../_images/som_imp2.png" style="width: 250px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 55 </span><span class="caption-text">…</span><a class="headerlink" href="#f-convolution-som-imp2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Par superposition, la sortie <span class="math notranslate nohighlight">\(y[n]\)</span> d’un système est la somme des réponses impulsionnelles aux entrées <span class="math notranslate nohighlight">\(x[n]\)</span>.</p>
+<figure class="align-default" id="f-convolution-som-imp3">
+<a class="reference internal image-reference" href="../_images/som_imp3.png"><img alt="../_images/som_imp3.png" src="../_images/som_imp3.png" style="width: 700px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 56 </span><span class="caption-text">…</span><a class="headerlink" href="#f-convolution-som-imp3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Donc :</p>
+<figure class="align-default" id="f-convolution-som-imp4">
+<a class="reference internal image-reference" href="../_images/som_imp4.png"><img alt="../_images/som_imp4.png" src="../_images/som_imp4.png" style="width: 300px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 57 </span><span class="caption-text">…</span><a class="headerlink" href="#f-convolution-som-imp4" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>qui n’est rien d’autre que le produit de convolution de l’entrée <span class="math notranslate nohighlight">\(x[n]\)</span> et de la réponse impulsionnelle <span class="math notranslate nohighlight">\(h[n]\)</span> du système.</p>
+<p>Dans le domaine continue, on peut montrer de la même manière que pour n’importe quelle entrée <span class="math notranslate nohighlight">\(x\)</span>, la sortie d’un système est la convolution entre <span class="math notranslate nohighlight">\(x\)</span> et <span class="math notranslate nohighlight">\(h\)</span> :</p>
+<div class="math notranslate nohighlight">
+\[
+  y = h * x.
+\]</div>
+<p>Si l’entrée est une impulsion, la sortie correspond bien à la réponse impulsionnelle <span class="math notranslate nohighlight">\(h\)</span> puisque <span class="math notranslate nohighlight">\(y=h*x = h*\delta=h\)</span>.</p>
+<p>La réponse impulsionnelle est donc très importante pour caractériser les systèmes physiques. Il suffit d’envoyer un pulse de courte durée puis mesurer la réponse pour être capable de trouver la réponse a n’importe quelle entrée. Un exemple de ceci est la communication entre une tour et un téléphone cellulaire. Pour savoir comment les signaux vont être réfléchis par les édifices, les voitures, les arbres, il faut la réponse impulsionnelle du système. On envoie un pulse entre la tour et le téléphone cellulaire, ce qui permet par la suite d’éliminer les réflexions et ainsi avoir le signal original, la voix, qui est perçu correctement par l’utilisateur. Avec la réponse impulsionnelle, on n’a pas besoin de connaître tous les details du fonctionnement d’un système.</p>
+</section>
+<section id="reponse-frequentielle">
+<h2>Réponse fréquentielle<a class="headerlink" href="#reponse-frequentielle" title="Permalink to this heading">#</a></h2>
+<p>La réponse fréquentielle (<em>frequency response</em>) est la transformée de Fourier de la réponse impulsionnelle.
+Elle représente les modifications apportées au signal d’entrée en fonction de la fréquence.</p>
+<p>Comme la sortie <span class="math notranslate nohighlight">\(y\)</span> du filtre est la convolution de l’entrée <span class="math notranslate nohighlight">\(x\)</span> avec la réponse impulsionnelle <span class="math notranslate nohighlight">\(h\)</span>,
+alors la transformée de Fourier de la sortie <span class="math notranslate nohighlight">\(Y\)</span> est la multiplication de la transformée de Fourier de l’entrée <span class="math notranslate nohighlight">\(X\)</span>
+avec la réponse fréquentielle <span class="math notranslate nohighlight">\(H\)</span> :</p>
+<div class="math notranslate nohighlight">
+\[
+  y = h * x
+  \qquad\Leftrightarrow\qquad
+  Y = H×X.
+\]</div>
+<p>Très souvent, la réponse fréquentielle est complexe (puisqu’elle est issue du calcul d’une transformée de Fourier).
+Pour simplifier son analyse on étudiera plutôt son gain, sa phase et son retard de groupe.</p>
+<section id="gain">
+<h3>Gain<a class="headerlink" href="#gain" title="Permalink to this heading">#</a></h3>
+<p>Le gain (<em>magnitude</em>) <span class="math notranslate nohighlight">\(G\)</span> d’un filtre est le module de sa réponse fréquentielle <span class="math notranslate nohighlight">\(H\)</span> :</p>
+<div class="math notranslate nohighlight">
+\[
+  G(f) = \left|H(f)\right|.
+\]</div>
+<p>Il est souvent défini avec une échelle logarithmique et s’exprime alors en décibel (dB) :</p>
+<div class="math notranslate nohighlight">
+\[
+  G_\mathrm{dB}(f) = 20\,\log_{10} \left|H(f)\right|.
+\]</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/intro-gain.svg"><img alt="../_images/intro-gain.svg" src="../_images/intro-gain.svg" width="450px" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 58 </span><span class="caption-text">Gain du filtre représenté figure <code class="xref std std-numref docutils literal notranslate"><span class="pre">F:filtrage:intro:repimp</span></code>.</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="phase">
+<h3>Phase<a class="headerlink" href="#phase" title="Permalink to this heading">#</a></h3>
+<p>La phase (<em>phase</em>) <span class="math notranslate nohighlight">\(\varphi\)</span> d’un filtre est l’argument de la réponse fréquentielle :</p>
+<div class="math notranslate nohighlight">
+\[
+  \varphi(f) = \mathrm{Arg} \left(H(f)\right)
+\]</div>
+<p>où <span class="math notranslate nohighlight">\(\mathrm{Arg}\)</span> est l’argument d’un nombre complexe.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="../_images/intro-phase.svg"><img alt="../_images/intro-phase.svg" src="../_images/intro-phase.svg" width="450px" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 59 </span><span class="caption-text">Phase du filtre représenté figure <code class="xref std std-numref docutils literal notranslate"><span class="pre">F:filtrage:intro:repimp</span></code>.</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="retard-de-groupe">
+<h3>Retard de groupe<a class="headerlink" href="#retard-de-groupe" title="Permalink to this heading">#</a></h3>
+<p>Une autre représentation importante est le retard de groupe (<em>group delay</em>) <span class="math notranslate nohighlight">\(\tau\)</span> défini comme la dérivée de la phase :</p>
+<div class="math notranslate nohighlight">
+\[
+  \tau(f) = - \frac{1}{2\pi} \frac{d \varphi(f)}{df}.
+\]</div>
+<p>Une phase linéaire implique donc un retard de groupe constant.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="../_images/intro-retard-groupe.svg"><img alt="../_images/intro-retard-groupe.svg" src="../_images/intro-retard-groupe.svg" width="450px" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 60 </span><span class="caption-text">Retard de groupe du filtre représenté figure <code class="xref std std-numref docutils literal notranslate"><span class="pre">F:filtrage:intro:repimp</span></code>.</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="exemple admonition">
+<p class="admonition-title">Exemple</p>
+<p>Trois sinusoïdes de fréquences 2, 4 ou 6 Hz, fenêtrées par une fenêtre de Hamming,
+sont mises en entrée du filtre représenté figure <code class="xref std std-numref docutils literal notranslate"><span class="pre">F:filtrage:intro:repimp</span></code>.
+La figure suivante illustre l’effet du gain, de la phase et du retard de groupe sur ces signaux.</p>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="../_images/intro-filtrage.svg"><img alt="../_images/intro-filtrage.svg" src="../_images/intro-filtrage.svg" width="100%" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 61 </span><span class="caption-text">Filtrage de signaux de fréquence différente.</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<p>Cet exemple illustre bien les concepts de gain, de déphasage et de retard de groupe subit par un signal dans un filtre. En effet :</p>
+<ul class="simple">
+<li><p>dans la bande passante, le signal d’entrée n’est presque pas modifié ;</p></li>
+<li><p>à la limite de la bande passante, le signal est d’une part légèrement atténué mais également déphasé et rallongé, ce qui indique un retard de groupe conséquent (le maximum du signal intervient avec un décalage plus important que pour le premier signal) ;</p></li>
+<li><p>enfin, dans la bande atténuée, le signal est fortement atténué ; il n’est même plus nécessaire de discuter d’un éventuel déphasage ou d’un retard de groupe.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./sys"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="systemes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Les Systèmes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="conv-spectre.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Convolution dans la mesure</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reponse-impulsionnelle">Réponse impulsionnelle</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reponse-frequentielle">Réponse fréquentielle</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gain">Gain</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#phase">Phase</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#retard-de-groupe">Retard de groupe</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Gilles Scheen
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
